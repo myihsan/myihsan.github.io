@@ -1,0 +1,15 @@
+title: Jierong's Ippo
+author: Jierong Li
+email: ihsan.lee@gmail.com
+description: A blog about iOS and Android development.
+url: "https://jierong.dev"
+twitter_username: IhsanLee
+github_username:  myihsan
+
+# Build settings
+theme: minima
+plugins:
+  - github-pages
+  - jekyll-feed
+
+google_analytics: UA-149938628-1
