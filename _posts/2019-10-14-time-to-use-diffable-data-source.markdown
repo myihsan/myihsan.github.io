@@ -16,7 +16,7 @@ class UICollectionViewDiffableDataSource<SectionIdentifierType,ItemIdentifierTyp
 where SectionIdentifierType : Hashable, ItemIdentifierType : Hashable
 ```
 
-The requirement is the same for other Diffable Data Source classes. We need two types that implemented `Hashable`, one for the section, one for the cell. Diffable Data Source uses them to determine which kind of update ( **insertion** , **deletion** , and **rearrangement** ) should be done.
+The requirement is the same for other Diffable Data Source classes. We need two types that implemented `Hashable`, one for the section, one for the cell. Diffable Data Source uses them to determine which kind of update should be done.
 
 Then create the instance of Diffable Data Source for Our table/collection view with a `CellProvider`.
 
@@ -54,16 +54,6 @@ The usage is simple, but there are also some obstructs we have to face.
 ### iOS 13/macOS 10.15 or Later
 
 The biggest obstruct we have to face since we can just update our table/collection view with `reloadData()` without animation and exceptions caused by the animation.
-
-### No documentation
-
-There is no documentation at all for now, so it's hard to solve issues we didn't expect.
-
-### No Support for Cell Content Change Animation
-
-Like I mentioned above, it only handles the animation for **insertion**, **deletion**, and **rearrangement**. If the new cell is not equal to the old cell, the animation will be a deletion for the old cell and an inserting for the new cell. Otherwise, the animation will be just a rearrangement for the cell without any cell content change.
-
-There is a new protocol in Xcode 11 named `Identifiable`, it seems suitable to combine with `Hashable` to determine a cell content change by `newItem.id == oldItem.id && newItem != oldItem`. But there is nothing change after I implement `Identifiable`. I am not sure if I have done something wrong since there is no documentation at all.
 
 ## Conclusion
 
