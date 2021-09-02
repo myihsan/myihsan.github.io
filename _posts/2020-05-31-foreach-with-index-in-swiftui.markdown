@@ -50,7 +50,9 @@ The reason is we are using indices as the identifier. When we modify the array i
 So let's just set the proper identifier.
 
 ``` swift
-ForEach(array.enumerated(), id: \.1) { index, element in
+// Avoid using `enumerated()`
+// https://khanlou.com/2017/03/you-probably-don't-want-enumerated
+ForEach(zip(array.indices, array), id: \.1) { index, element in
     ...
 }
 ```
@@ -60,7 +62,7 @@ This wouldn't build since `array.enumerated()` is not a `RandomAccessCollection`
 We can fix this error by wrapping it with `Array` since `Array` adopted `RandomAccessCollection`.
 
 ``` swift
-ForEach(Array(array.enumerated()), id: \.1) { index, element in
+ForEach(Array(zip(array.indices, array)), id: \.1) { index, element in
     ...
 }
 ```
