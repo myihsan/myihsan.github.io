@@ -1,13 +1,19 @@
 title: Jierong's Ippo
-author: Jierong Li
-email: jierong.li@proton.me
 description: A blog about iOS and Android development.
 url: "https://jierong.dev"
-twitter_username: IhsanLee
-github_username:  myihsan
+
+author:
+  name: Jierong Li
+  email: jierongli@proton.me
 
 # Build settings
-theme: minima
+remote_theme: jekyll/minima@da43ba27a5d643f3ead1e1aad6764a28ef5a92c1
+minima:
+  skin: auto
+  social_links:
+    - { platform: github,  user_url: "https://github.com/myihsan" }
+    - { platform: mastodon, user_url: "https://mastodon.social/@jierongli" }
 plugins:
   - github-pages
   - jekyll-feed
+  - jekyll-remote-theme
