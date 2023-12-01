@@ -59,8 +59,10 @@ struct BoundsAnchorPreferenceKey: PreferenceKey {
 
     static var defaultValue: Anchor<CGRect>? = nil
 
-    static func reduce(value: inout CGRect?, nextValue: () -> CGRect?) {
-        value = nextValue()
+    static func reduce(value: inout Anchor<CGRect>?, nextValue: () -> Anchor<CGRect>?) {
+        if let nextValue = nextValue() {
+            value = nextValue
+        }
     }
 }
 ```
@@ -81,28 +83,15 @@ GeometryReader { proxy in
 
 例えば`UISegmentedControl`のように選択された部分が変わった場合、背景をアニメーション付きで移動する部品を作ります。
 
-選択された部分のboundsだけを取得するには、`if`により違う`View`になることを対処する必要があります。`AnyView`はもちろんできるし、`ZStack`で対処する方法が見たことがあるかもしれません。`ZStack`で対処できる根本的な理由はfunction builderのおかげですので、下記のような`extension`でも対処できます。
+まずは選択された部分のboundsを取得しましょう。
 
 ```swift
-extension View {
-    @ViewBuilder func modifier<T>(shouldModify: Bool, modifier: (Self) -> T) -> some View where T : View {
-        if shouldModify {
-            modifier(self)
-        } else {
-            self
-        }
-    }
+.anchorPreference(key: BoundsAnchorPreferenceKey.self, value: .bounds) { 
+    index == selectedSegmentIndex ? $0: nil 
 }
 ```
 
-```swift
-.modifier(shouldModify: index == selectedSegmentIndex) { content in
-    content
-        .anchorPreference(key: BoundsAnchorPreferenceKey.self, value: .bounds) { $0 }
-}
-```
-
-これで選択された部分のboundsだけを取得できるようになりました。
+選択されてない部分は`nil`を返すことで無視されます。
 
 次は選択された部分の背景を作ります。
 
@@ -118,7 +107,7 @@ extension View {
 }
 ```
 
-`Anchor<CGRect>?`の`nil`に対してまた`AnyView(EmptyView())`とかで対処する必要があると思いきや、`Optional.map(_:)`で普通に対処できます。
+`Anchor<CGRect>?`の`nil`に対してまた`EmptyView()`とかで対処する必要があると思いきや、`Optional.map(_:)`で普通に対処できます。
 
 かつ`animation(_:)`つけている場合でも、`nil`のおかげで、背景は初期状態は`.zero`から取得できたframeになるのではなく、背景なしから背景ありになりますので、[変わった手法]({% post_url 2020-08-15-getting-subview-frame-in-swiftui-deprecated %})の方にある不要なアニメーションがありません。
 
