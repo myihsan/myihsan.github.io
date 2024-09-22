@@ -17,3 +17,5 @@ plugins:
   - github-pages
   - jekyll-feed
   - jekyll-remote-theme
+header_pages:
+  - about.md
